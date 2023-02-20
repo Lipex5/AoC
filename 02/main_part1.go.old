@@ -1,0 +1,62 @@
+// A - X - Rock  		1
+// B - Y - Paper  		2
+// C - Z - Scissors	  	3
+// Win 6 - Draw 3 - Lose 0
+
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"os"
+	"strings"
+)
+
+func main() {
+	points := 0
+	win := 6
+	draw := 3
+
+	readFile, err := os.Open("input.txt")
+
+	if err != nil {
+		fmt.Println(err)
+	}
+	fileScanner := bufio.NewScanner(readFile)
+
+	fileScanner.Split(bufio.ScanLines)
+
+	for fileScanner.Scan() {
+		output := strings.Split(fileScanner.Text(), " ")
+		switch output[1] {
+		case "X":
+			points += 1
+			switch output[0] {
+			case "C":
+				points += win
+
+			case "A":
+				points += draw
+			}
+		case "Y":
+			points += 2
+			switch output[0] {
+			case "A":
+				points += win
+
+			case "B":
+				points += draw
+			}
+		case "Z":
+			points += 3
+			switch output[0] {
+			case "B":
+				points += win
+
+			case "C":
+				points += draw
+			}
+		}
+	}
+	fmt.Println(points)
+}

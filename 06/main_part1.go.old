@@ -1,0 +1,66 @@
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"os"
+)
+
+func main() {
+	readFile, err := os.Open("input.txt")
+
+	if err != nil {
+		fmt.Println(err)
+	}
+	fileScanner := bufio.NewScanner(readFile)
+
+	fileScanner.Split(bufio.ScanLines)
+
+	array := []rune{' ', ' ', ' ', ' '}
+
+	for fileScanner.Scan() {
+
+		// Add first 4 inputs
+		for i := 0; i < 4; i++ {
+			array[i] = rune(fileScanner.Text()[i])
+		}
+
+		// Loop through all chars of the input
+		for i := 4; i < len(fileScanner.Text()); i++ {
+			fmt.Println(string(array))
+			if check_different(array) {
+				fmt.Print("Found at: ")
+				fmt.Println(i)
+				break
+			}
+			array = rotate_array(array)
+			array[3] = rune(fileScanner.Text()[i])
+		}
+	}
+}
+
+func rotate_array(arr []rune) []rune {
+	for i := 0; i < 3; i++ {
+		arr[i] = arr[i+1]
+	}
+	arr[3] = rune(' ')
+
+	fmt.Println(string(arr))
+	return arr
+}
+
+func check_different(arr []rune) bool {
+	for i := 0; i < 4; i++ {
+		for j := 0; j < 4; j++ {
+			if i == j {
+				fmt.Println(i)
+			} else if arr[i] == arr[j] {
+				fmt.Println(string(arr[i]))
+				fmt.Println(string(arr[j]))
+				return false
+			}
+		}
+	}
+	fmt.Println(string(arr))
+	return true
+}
